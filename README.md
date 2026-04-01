@@ -202,7 +202,7 @@ Edit `backend/.env` to customize:
 ```env
 YOLO_MODEL=yolov8n.pt           # Model size (n/s/m/l/x)
 YOLO_CONFIDENCE=0.5             # Detection threshold
-LOITERING_THRESHOLD_SECONDS=30  # Loitering time
+LOITERING_THRESHOLD_SECONDS=20  # Loitering time
 INTRUSION_ZONE=0.6,0.0,1.0,1.0  # Restricted zone area
 ```
 
