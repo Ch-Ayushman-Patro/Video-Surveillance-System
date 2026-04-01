@@ -21,7 +21,6 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 - [Running the System](#-running-the-system)
 - [API Endpoints](#-api-endpoints)
 - [Triple-Lock Logic](#-triple-lock-logic)
-- [Demo Script](#-demo-presentation-script)
 - [Future Scope](#-future-scope)
 
 ---
@@ -286,22 +285,6 @@ Lock 3: Face Recognition              🔓 Placeholder
 In the alerts panel, this appears as:
 
 - **[✔ Detection] [✔ Behavior] [○ Face]**
-
----
-
-## 🎤 Demo Presentation Script
-
-> **Duration:** ~5 minutes
-
-1. **Introduction (30s):** *"This is an AI-powered video surveillance system that uses YOLOv8 for real-time object detection and rule-based behavior analysis."*
-
-2. **Architecture (45s):** *"The system has two parts — a Python FastAPI backend running YOLOv8 detection, and a React dashboard. Video is streamed via MJPEG and alerts are polled via REST APIs."*
-
-3. **Live Demo (2min):** Upload a video, show the live feed with bounding boxes, point out the restricted zone overlay, wait for loitering/intrusion alerts.
-
-4. **Alerts (45s):** *"Each alert shows the Triple-Lock status — Detection confirmed, Behavior confirmed, and a placeholder for Face Recognition. You can click to view the snapshot."*
-
-5. **Future Scope (30s):** *"In future versions, we plan to add face recognition, edge AI deployment, and multi-camera support."*
 
 ---
 
