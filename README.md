@@ -202,7 +202,7 @@ npm install
 
 ### 4. Configuration (Optional)
 
-Edit `backend/.env` to customize:
+Add `backend/.env`:
 
 ```env
 YOLO_MODEL=weights/yolov8m.pt   # Use local model file inside backend/weights
