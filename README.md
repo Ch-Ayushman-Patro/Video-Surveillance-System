@@ -70,19 +70,20 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 ## ✨ Features
 
 ### AI & Detection
-- **YOLOv8 Object Detection** — Detects persons, bags, knives, and other surveillance-relevant objects
-- **Centroid-Based Tracking** — Assigns persistent IDs to objects across frames
-- **Loitering Detection** — Alerts when a person stays too long in the scene
-- **Intrusion Detection** — Alerts when a person enters a restricted zone
-- **Unattended Object Detection** — Alerts when a bag is left without a nearby person
+- **YOLOv8 Object Detection** — Focused class filtering for surveillance-critical classes: person, backpack, handbag, suitcase, knife
+- **Centroid-Based Tracking** — Persistent track IDs with class-aware matching to reduce ID switching
+- **Loitering Detection** — Duration-aware per-person analysis with temporal persistence checks
+- **Intrusion Detection** — Restricted-zone dwell-time verification with severity escalation
+- **Unattended Object Detection** — Nearest-person distance validation + minimum unattended time
 - **Triple-Lock Logic** — Multi-layer verification (Detection → Behavior → Face ID placeholder)
 
 ### Dashboard
-- **MJPEG Live Video Feed** — Real-time processed video with overlays
-- **Drag & Drop Video Upload** — Upload surveillance videos directly from the browser
-- **Alert Panel** — Severity-coded alerts with timestamps and snapshot links
+- **MJPEG Live Video Feed** — Real-time processed video with smooth fade-in and loading skeleton
+- **Drag & Drop Video Upload** — Immediate upload/processing status transitions
+- **Alert Panel** — Severity-coded alerts with timestamps, object ID, duration, confidence, and snapshot links
 - **Detected Objects Panel** — Live tracked objects with confidence bars
 - **Stats Bar** — FPS, object count, alert count, uptime
+- **State-Driven UX** — Explicit dashboard states: IDLE → UPLOADING → PROCESSING → RUNNING → FINISHED
 - **Dark Theme** — Modern glassmorphism UI with animations
 
 ---
@@ -103,9 +104,9 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 ```
 Video-Surveillance-System/
 ├── backend/
-│   ├── app.py                      # Entry point → starts server
 │   ├── requirements.txt            # Python dependencies
 │   ├── .env                        # Configuration
+│   ├── .venv/                      # Virtual environment (local)
 │   ├── app/
 │   │   ├── main.py                 # FastAPI app factory
 │   │   ├── config.py               # Settings from .env
@@ -123,20 +124,24 @@ Video-Surveillance-System/
 │   │   └── utils/
 │   │       └── drawing.py          # OpenCV drawing helpers
 │   ├── snapshots/                  # Alert screenshots (auto-created)
-│   └── uploads/                    # Uploaded videos (auto-created)
+│   ├── uploads/                    # Uploaded videos (auto-created)
+│   └── weights/                    # YOLO model weights (.pt)
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── App.tsx                 # Root component
 │   │   ├── index.css               # Design system
-│   │   ├── types/index.ts          # TypeScript interfaces
+│   │   ├── types/surveillance.ts   # TypeScript interfaces
 │   │   ├── hooks/usePolling.ts     # Polling hook
+│   │   ├── pages/Index.tsx         # Main dashboard page
 │   │   └── components/
-│   │       ├── Dashboard.tsx       # Main layout
-│   │       ├── VideoFeed.tsx       # Video display + upload
-│   │       ├── AlertsPanel.tsx     # Alert list
-│   │       ├── DetectedObjects.tsx # Object cards
-│   │       └── StatsBar.tsx        # Live statistics
+│   │       ├── ThemeToggle.tsx
+│   │       └── surveillance/
+│   │           ├── VideoFeed.tsx       # Video display + upload
+│   │           ├── AlertsPanel.tsx     # Alert list
+│   │           ├── DetectedObjects.tsx # Object cards
+│   │           ├── ErrorModal.tsx      # Blocking init error modal
+│   │           └── StatsBar.tsx        # Live statistics
 │   ├── vite.config.ts
 │   └── package.json
 │
@@ -153,7 +158,7 @@ Video-Surveillance-System/
 | **Node.js** | 18+ | [nodejs.org](https://nodejs.org/) |
 | **Git** | Any | [git-scm.com](https://git-scm.com/) |
 
-> **No GPU required.** YOLOv8 nano model runs on CPU. GPU (CUDA) is auto-detected if available.
+> **No GPU required.** YOLOv8 runs on CPU. GPU (CUDA/MPS) is auto-detected if available.
 
 ---
 
@@ -172,19 +177,19 @@ cd Video-Surveillance-System
 cd backend
 
 # Create virtual environment
-python -m venv venv
+python -m venv .venv
 
 # Activate (Windows)
-venv\Scripts\activate
+.venv\Scripts\activate
 
 # Activate (macOS/Linux)
-# source venv/bin/activate
+# source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-> The YOLOv8 model (~6MB) will auto-download on first run.
+> Recommended: place your model file inside `backend/weights` and point `YOLO_MODEL` to that path to avoid re-downloading.
 
 ### 3. Frontend Setup
 
@@ -200,10 +205,13 @@ npm install
 Edit `backend/.env` to customize:
 
 ```env
-YOLO_MODEL=yolov8n.pt           # Model size (n/s/m/l/x)
+YOLO_MODEL=weights/yolov8m.pt   # Use local model file inside backend/weights
 YOLO_CONFIDENCE=0.5             # Detection threshold
 LOITERING_THRESHOLD_SECONDS=30  # Loitering time
 INTRUSION_ZONE=0.6,0.0,1.0,1.0  # Restricted zone area
+UNATTENDED_OBJECT_SECONDS=15     # Unattended object duration
+ALERT_COOLDOWN_SECONDS=20        # Duplicate alert suppression window
+DEVICE=auto                      # auto | cuda | cpu | mps
 ```
 
 ---
@@ -214,8 +222,8 @@ INTRUSION_ZONE=0.6,0.0,1.0,1.0  # Restricted zone area
 
 ```bash
 cd backend
-venv\Scripts\activate    # Windows
-python app.py
+.venv\Scripts\activate    # Windows
+uvicorn app.main:app --reload
 ```
 
 Server starts at: **http://localhost:8000**
@@ -228,15 +236,16 @@ cd frontend
 npm run dev
 ```
 
-Dashboard opens at: **http://localhost:5173**
+Dashboard opens at: **http://localhost:8080**
 
 ### Using the System
 
-1. Open **http://localhost:5173** in your browser
+1. Open **http://localhost:8080** in your browser
 2. **Upload a video** — drag & drop or click the upload area
-3. Processing starts automatically — watch the live feed
-4. **Alerts** appear in the right panel when suspicious behavior is detected
-5. Click **📸 Snapshot** on any alert to see the captured frame
+3. Dashboard transitions through: **UPLOADING → PROCESSING → RUNNING**
+4. **Alerts** appear in the right panel when suspicious behavior is confirmed
+5. On completion, status transitions to **FINISHED** and processing stops (no looping)
+6. Click **View** on any alert to open the captured snapshot
 
 ---
 
@@ -267,12 +276,16 @@ Lock 1: Object Detection (YOLOv8)     ✅ Automated
 Lock 2: Behavior Analysis (Rules)     ✅ Automated
         ↓ Suspicious behavior matched
 Lock 3: Face Recognition              🔓 Placeholder
-        ↓ (Skipped — reserved for future)
+        ↓ (Displayed as pending in UI)
   
         ══════════════════
         ║  ALERT RAISED  ║
         ══════════════════
 ```
+
+In the alerts panel, this appears as:
+
+- **[✔ Detection] [✔ Behavior] [○ Face]**
 
 ---
 
