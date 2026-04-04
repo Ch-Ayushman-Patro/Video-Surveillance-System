@@ -30,7 +30,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    FRONTEND (React + TypeScript)             │
+│              FRONTEND (React + TypeScript)                   │
 │  ┌────────────┐  ┌──────────────┐  ┌───────────────────┐     │
 │  │ VideoFeed  │  │ AlertsPanel  │  │ DetectedObjects   │     │
 │  │ (MJPEG)    │  │ (Polling)    │  │ (Polling)         │     │
@@ -48,7 +48,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 │  └─────────────────────┬───────────────────────────┘         │
 │                        │                                     │
 │  ┌─────────────────────▼───────────────────────────┐         │
-│  │          Video Processor (Pipeline)             │         │
+│  │           Video Processor (Pipeline)            │         │
 │  │                                                 │         │
 │  │  ┌──────────┐  ┌───────────┐  ┌──────────────┐  │         │
 │  │  │  YOLOv8  │→ │  Tracker  │→ │  Behavior    │  │         │
