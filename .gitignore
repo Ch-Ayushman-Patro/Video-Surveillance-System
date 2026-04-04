@@ -29,6 +29,8 @@ backend/weights/
 snapshots/
 uploads/
 weights/
+.docs/
+.test-videos/
 
 # Keep directory structure but ignore files inside
 !backend/uploads/.gitkeep

@@ -20,8 +20,8 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 - [Installation & Setup](#-installation--setup)
 - [Running the System](#-running-the-system)
 - [API Endpoints](#-api-endpoints)
+- [Alert Behavior & Update Rules](#-alert-behavior--update-rules)
 - [Triple-Lock Logic](#-triple-lock-logic)
-- [Demo Script](#-demo-presentation-script)
 - [Future Scope](#-future-scope)
 
 ---
@@ -34,7 +34,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 │  ┌────────────┐  ┌──────────────┐  ┌───────────────────┐     │
 │  │ VideoFeed  │  │ AlertsPanel  │  │ DetectedObjects   │     │
 │  │ (MJPEG)    │  │ (Polling)    │  │ (Polling)         │     │
-│  └─────┬──────┘  └──────┬───────┘  └────────┬──────────┘     │
+│  └─────┬──────┘  └─────┬────────┘  └────────┬──────────┘     │
 │        │               │                    │                │
 └────────┼───────────────┼────────────────────┼────────────────┘
          │               │                    │
@@ -42,7 +42,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
          │               │                    │
 ┌────────┼───────────────┼────────────────────┼────────────────┐
 │        │         BACKEND (FastAPI)          │                │
-│  ┌─────▼─────────────────────────────────────▼─────┐         │
+│  ┌─────▼────────────────────────────────────▼──────┐         │
 │  │              API Layer (routes.py)              │         │
 │  │  /upload  /start  /stop  /status  /video_feed   │         │
 │  └─────────────────────┬───────────────────────────┘         │
@@ -202,12 +202,12 @@ npm install
 
 ### 4. Configuration (Optional)
 
-Edit `backend/.env` to customize:
+Add `backend/.env`:
 
 ```env
 YOLO_MODEL=weights/yolov8m.pt   # Use local model file inside backend/weights
 YOLO_CONFIDENCE=0.5             # Detection threshold
-LOITERING_THRESHOLD_SECONDS=30  # Loitering time
+LOITERING_THRESHOLD_SECONDS=20  # Loitering time
 INTRUSION_ZONE=0.6,0.0,1.0,1.0  # Restricted zone area
 UNATTENDED_OBJECT_SECONDS=15     # Unattended object duration
 ALERT_COOLDOWN_SECONDS=20        # Duplicate alert suppression window
@@ -266,6 +266,42 @@ Dashboard opens at: **http://localhost:8080**
 
 ---
 
+## 🚨 Alert Behavior & Update Rules
+
+Alerts are designed to be stable and practical. The system does not raise an alert from one random frame. It waits, verifies, and then shows alerts only when behavior is consistent.
+
+### 1. Loitering Alert
+- Raised when a person stays in the same monitored area longer than the configured limit.
+- The system checks this for a short period before confirming, to reduce false alarms.
+- If the person keeps staying longer, alert seriousness may increase.
+- Alert card includes person ID and how long they have remained.
+
+### 2. Restricted Zone (Intrusion) Alert
+- Raised when a person enters the restricted area.
+- The person must remain there briefly before the alert is confirmed.
+- This avoids instant alerts from quick edge crossings.
+- If the person keeps staying in the restricted area, the severity can move from medium to high/critical.
+- Alert card includes person ID and time spent in the zone.
+
+### 3. Unattended Object Alert
+- Applies to bags and similar carry items (backpack, handbag, suitcase).
+- Raised when an item is left without a nearby person for the configured duration.
+- The system waits and confirms over multiple checks before creating the alert.
+- If the item remains unattended longer, severity can increase.
+- Alert card includes object ID and unattended duration.
+
+### 4. Alert Deduplication and Cooldown
+- The same alert for the same object is not repeated continuously.
+- After an alert is raised, a cooldown period is applied before another similar one can appear.
+- This keeps the panel readable and prevents alert spam.
+
+### 5. When Alerts Appear in UI
+- Alerts refresh automatically every few seconds.
+- New alerts are added to the list without removing older ones.
+- Each alert shows useful context: time, severity, related object ID, duration, confidence, and snapshot (if available).
+
+---
+
 ## 🔒 Triple-Lock Logic
 
 The system uses a simplified multi-layer verification:
@@ -286,22 +322,6 @@ Lock 3: Face Recognition              🔓 Placeholder
 In the alerts panel, this appears as:
 
 - **[✔ Detection] [✔ Behavior] [○ Face]**
-
----
-
-## 🎤 Demo Presentation Script
-
-> **Duration:** ~5 minutes
-
-1. **Introduction (30s):** *"This is an AI-powered video surveillance system that uses YOLOv8 for real-time object detection and rule-based behavior analysis."*
-
-2. **Architecture (45s):** *"The system has two parts — a Python FastAPI backend running YOLOv8 detection, and a React dashboard. Video is streamed via MJPEG and alerts are polled via REST APIs."*
-
-3. **Live Demo (2min):** Upload a video, show the live feed with bounding boxes, point out the restricted zone overlay, wait for loitering/intrusion alerts.
-
-4. **Alerts (45s):** *"Each alert shows the Triple-Lock status — Detection confirmed, Behavior confirmed, and a placeholder for Face Recognition. You can click to view the snapshot."*
-
-5. **Future Scope (30s):** *"In future versions, we plan to add face recognition, edge AI deployment, and multi-camera support."*
 
 ---
 
