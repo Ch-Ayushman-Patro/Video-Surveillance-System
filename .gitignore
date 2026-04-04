@@ -22,19 +22,20 @@ ENV/
 .ruff_cache/
 *.pt
 
-# Media, Models, and User Data
-backend/snapshots/
-backend/uploads/
-backend/weights/
-snapshots/
-uploads/
-weights/
+# User Data
 .docs/
 .test-videos/
 
-# Keep directory structure but ignore files inside
+# Keep backend data directories but ignore generated files inside
+!backend/uploads/
+!backend/snapshots/
+!backend/weights/
+backend/uploads/*
+backend/snapshots/*
+backend/weights/*
 !backend/uploads/.gitkeep
 !backend/snapshots/.gitkeep
+!backend/weights/.gitkeep
 
 # ===========================
 # Node / Frontend
