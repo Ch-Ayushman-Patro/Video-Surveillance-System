@@ -1,4 +1,4 @@
-# 🎯 AI & ML Enabled Intelligent Video Surveillance System
+# 🎯 AIML Enabled Intelligent Video Surveillance System
 
 A real-time AI-powered video surveillance system that detects suspicious activities using **YOLOv8** object detection, **rule-based behavior analysis**, and displays live alerts on a modern **React** dashboard.
 
