@@ -1,6 +1,6 @@
 # 🎯 AIML Enabled Intelligent Video Surveillance System
 
-A real-time AI-powered video surveillance system that detects suspicious activities using **YOLOv8** object detection, **rule-based behavior analysis**, and displays live alerts on a modern **React** dashboard.
+A real-time AI-powered video surveillance system that detects suspicious activities using **YOLOv8** object detection, **rule-based behavior analysis** and displays live alerts on a modern **React** dashboard.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)
