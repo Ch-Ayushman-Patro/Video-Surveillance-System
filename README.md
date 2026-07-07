@@ -1,4 +1,4 @@
-# 🎯 AIML Enabled Intelligent Video Surveillance System
+# AIML Enabled Intelligent Video Surveillance System
 
 A real-time AI-powered video surveillance system that detects suspicious activities using **YOLOv8** object detection, **rule-based behavior analysis** and displays live alerts on a modern **React** dashboard.
 
@@ -26,7 +26,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -67,7 +67,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ---
 
-## ✨ Features
+## Features
 
 ### AI & Detection
 - **YOLOv8 Object Detection** — Focused class filtering for surveillance-critical classes: person, backpack, handbag, suitcase, knife
@@ -88,7 +88,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -99,7 +99,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Video-Surveillance-System/
@@ -150,7 +150,7 @@ Video-Surveillance-System/
 
 ---
 
-## 📦 Prerequisites
+## Prerequisites
 
 | Tool | Version | Installation |
 |------|---------|-------------|
@@ -162,7 +162,7 @@ Video-Surveillance-System/
 
 ---
 
-## 🚀 Installation & Setup
+## Installation & Setup
 
 ### 1. Clone the Repository
 
@@ -216,7 +216,7 @@ DEVICE=auto                      # auto | cuda | cpu | mps
 
 ---
 
-## ▶️ Running the System
+## Running the System
 
 ### Terminal 1 — Backend
 
@@ -249,7 +249,7 @@ Dashboard opens at: **http://localhost:8080**
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
@@ -266,7 +266,7 @@ Dashboard opens at: **http://localhost:8080**
 
 ---
 
-## 🚨 Alert Behavior & Update Rules
+## Alert Behavior & Update Rules
 
 Alerts are designed to be stable and practical. The system does not raise an alert from one random frame. It waits, verifies, and then shows alerts only when behavior is consistent.
 
@@ -302,7 +302,7 @@ Alerts are designed to be stable and practical. The system does not raise an ale
 
 ---
 
-## 🔒 Triple-Lock Logic
+## Triple-Lock Logic
 
 The system uses a simplified multi-layer verification:
 
@@ -325,7 +325,7 @@ In the alerts panel, this appears as:
 
 ---
 
-## 🔮 Future Scope
+## Future Scope
 
 - **Face Recognition (Lock 3)** — Integrate face detection and identification
 - **Edge AI Deployment** — Run on Raspberry Pi or NVIDIA Jetson
@@ -334,9 +334,3 @@ In the alerts panel, this appears as:
 - **Cloud Storage** — Store alerts and snapshots in cloud (AWS S3, GCS)
 - **Deep Learning Behavior** — Replace rules with trained behavior models
 - **Mobile App** — Push notifications to mobile devices
-
----
-
-## 📄 License
-
-This project is for educational and demonstration purposes.
