@@ -10,7 +10,7 @@ A real-time AI-powered video surveillance system that detects suspicious activit
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [System Architecture](#-system-architecture)
 - [Features](#-features)
