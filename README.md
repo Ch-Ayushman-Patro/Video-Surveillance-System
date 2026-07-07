@@ -334,3 +334,9 @@ In the alerts panel, this appears as:
 - **Cloud Storage** — Store alerts and snapshots in cloud (AWS S3, GCS)
 - **Deep Learning Behavior** — Replace rules with trained behavior models
 - **Mobile App** — Push notifications to mobile devices
+
+## Contact
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ch-ayushman-patro) [![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Ch-Ayushman-Patro)
+
+*For questions, suggestions, or collaboration opportunities, feel free to reach out!*
